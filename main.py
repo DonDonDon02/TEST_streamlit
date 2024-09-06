@@ -4,8 +4,10 @@ from dotenv import load_dotenv
 import pandas as pd
 import streamlit as st
 
-
+st.title("Hello")
 load_dotenv()
+
+
 
 server = os.getenv('DATABASE_SER')
 database = 'mySampleDatabase'
@@ -30,6 +32,8 @@ with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE=
         df = pd.DataFrame.from_records(rows, columns=[desc[0] for desc in cursor.description])
 
 # Display the DataFrame
+
+
 st.write(df)
 
 
