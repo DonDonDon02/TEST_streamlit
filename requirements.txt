@@ -2,3 +2,6 @@ streamlit
 pandas
 pyodbc
 python-dotenv
+unixodbc-dev
+msodbcsql18
+mssql-tools
