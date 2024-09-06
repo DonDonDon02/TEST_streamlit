@@ -1,3 +1,2 @@
 unixodbc-dev
 mssql-tools
-msodbcsql17
