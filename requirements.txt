@@ -1,4 +1,4 @@
 streamlit
 pandas
-pyodbc
+pyodbc==5.1.0
 python-dotenv
