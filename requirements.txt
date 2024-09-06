@@ -3,5 +3,5 @@ pandas
 pyodbc
 python-dotenv
 unixodbc-dev
-msodbcsql17
+msodbcsql18
 mssql-tools
