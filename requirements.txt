@@ -2,4 +2,3 @@ streamlit
 pandas
 pyodbc
 python-dotenv
-unixODBC
