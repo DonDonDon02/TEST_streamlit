@@ -44,7 +44,7 @@ with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE=
 # Display the DataFrame
 
 
-st.write(df)
+st.write(rows)
 
 
 
