@@ -8,6 +8,7 @@ import pandas as pd
 
 
 
+
 load_dotenv()
 
 
@@ -29,10 +30,10 @@ with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE=
     with conn.cursor() as cursor:
         # Execute the query
         cursor.execute('''
-            SELECT TOP 20 pc.Name as CategoryName, p.name as ProductName
-            FROM SalesLT.ProductCategory pc
-            JOIN SalesLT.Product p
-            ON pc.productcategoryid = p.productcategoryid;
+            SELECT *
+            FROM [dbo].[sp500_stock_data]
+            WHERE code = 'AAPL'
+            
         ''')
 
         # Fetch all rows
@@ -44,8 +45,6 @@ with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE=
 # Display the DataFrame
 
 
-st.write(rows)
-
-
+st.write(df,df.columns)
 
 
