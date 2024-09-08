@@ -13,13 +13,12 @@ ssl._create_default_https_context = ssl._create_unverified_context
 # start_date = st.sidebar.date_input("Start date", datetime.date(2019, 1, 1))
 # end_date = st.sidebar.date_input("End date", datetime.date.today())
 
-@st.cache
-def show_sp500():
-    st.title("S&P 500\n -----")
-    sp500_csv_= pd.read_csv('https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv')
-    st.write(sp500_csv_)
-    
-show_sp500()
+
+
+st.title("S&P 500\n -----")
+sp500_csv_= pd.read_csv('https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv')
+st.write(sp500_csv_)
+
 st.title("Nasdaq\n -----")
 nasdaq_csv_= pd.read_csv('https://raw.githubusercontent.com/datasets/nasdaq-listings/master/data/nasdaq-listed.csv')
 st.write(nasdaq_csv_)
