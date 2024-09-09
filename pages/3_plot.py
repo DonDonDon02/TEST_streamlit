@@ -44,27 +44,27 @@ options2 = st.sidebar.selectbox(
 
 if chosen == 'S&P 500':
 
-    tickerData = yf.Ticker(options) # Get ticker data
-    tickerDf = tickerData.history(period='1d', start=start_date, end=end_date)
+    # tickerData = yf.Ticker(options) # Get ticker data
+    # tickerDf = tickerData.history(period='1d', start=start_date, end=end_date)
 
-    st.header('**Bollinger Bands**')
-    qf=cf.QuantFig(tickerDf,title='First Quant Figure',legend='top',name='GS')
-    qf.add_bollinger_bands()
-    fig = qf.iplot(asFigure=True)
-    st.plotly_chart(fig)  
+    # st.header('**Bollinger Bands**')
+    # qf=cf.QuantFig(tickerDf,title='First Quant Figure',legend='top',name='GS')
+    # qf.add_bollinger_bands()
+    # fig = qf.iplot(asFigure=True)
+    # st.plotly_chart(fig)  
 
 
 
 
 if chosen == 'Nasdaq':
 
-    tickerData = yf.Ticker(options2) # Get ticker data
-    tickerDf = tickerData.history(period='1d', start=start_date, end=end_date)
+    # tickerData = yf.Ticker(options2) # Get ticker data
+    # tickerDf = tickerData.history(period='1d', start=start_date, end=end_date)
 
-    st.header('**Bollinger Bands**')
-    qf=cf.QuantFig(tickerDf,title='First Quant Figure',legend='top',name='GS')
-    qf.add_bollinger_bands()
-    fig = qf.iplot(asFigure=True)
-    st.plotly_chart(fig)  
+    # st.header('**Bollinger Bands**')
+    # qf=cf.QuantFig(tickerDf,title='First Quant Figure',legend='top',name='GS')
+    # qf.add_bollinger_bands()
+    # fig = qf.iplot(asFigure=True)
+    # st.plotly_chart(fig)  
     
     
