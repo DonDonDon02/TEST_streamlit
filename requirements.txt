@@ -5,4 +5,5 @@ python-dotenv
 yfinance
 cufflinks
 prophet==1.1.5
+fbprophet
 numpy
