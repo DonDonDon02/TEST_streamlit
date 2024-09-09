@@ -69,10 +69,12 @@ options2 = st.sidebar.selectbox(
 #     st.plotly_chart(fig)  
     
     
-tickerData = yf.Ticker("AAPL") # Get ticker data
-df = tickerData.history(period='1d', start='2020-01-01', end='2024-01-01') #get the historical prices for this ticker
-df.reset_index(inplace=True)
-df = df.round(2)
-df['Date'] = df['Date'].dt.strftime('%Y/%m/%d')
-df.set_index('Date', inplace=True)
-st.line_chart(df['Close'])
+if chosen == 'S&P 500':
+    
+    tickerData = yf.Ticker(options) # Get ticker data
+    df = tickerData.history(period='1d', start=start_date, end=end_date) #get the historical prices for this ticker
+    df.reset_index(inplace=True)
+    df = df.round(2)
+    df['Date'] = df['Date'].dt.strftime('%Y/%m/%d')
+    df.set_index('Date', inplace=True)
+    st.line_chart(df['Close'])
