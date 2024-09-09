@@ -20,7 +20,7 @@ load_dotenv()
 # driver = '{ODBC Driver 18 for SQL Server}'
 
 server = st.secrets['DATABASE_SER']
-database = 'mySampleDatabase'
+database = 'donavan02_1'
 username = st.secrets['DATABASE_USERNAME']
 password = st.secrets['DATABASE_PASSWORD']
 driver = '{ODBC Driver 17 for SQL Server}'
@@ -30,9 +30,16 @@ with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE=
     with conn.cursor() as cursor:
         # Execute the query
         cursor.execute('''
-            SELECT *
-            FROM [dbo].[sp500_stock_data]
-            WHERE code = 'AAPL'
+      SELECT TOP (1000) [id]
+      ,[date]
+      ,[open]
+      ,[high]
+      ,[low]
+      ,[close]
+      ,[volume]
+      ,[code]
+      ,[diff]
+  FROM [dbo].[sp500_stock_data]
             
         ''')
 
