@@ -6,3 +6,4 @@ yfinance
 cufflinks==0.17.3
 prophet==1.1.5
 numpy
+plotly
