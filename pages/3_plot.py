@@ -7,6 +7,7 @@ import yfinance as yf
 import datetime
 import plotly.express as px 
 import pandas_ta as ta 
+import plotly.graph_objs as go
 
 #ta.ma
 
@@ -119,7 +120,8 @@ try:
     df.reset_index(inplace=True)
     df = df.round(2)
     df['Date'] = df['Date'].dt.strftime('%Y/%m/%d')
-    st.title(options)
+    st.title(f'{options} - {get_stock_info(options)["longName"]}') 
+    
     df.set_index('Date', inplace=True)
     st.line_chart(df['Close'])
 except:
