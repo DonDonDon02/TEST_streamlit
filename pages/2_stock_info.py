@@ -4,6 +4,7 @@ import pyodbc
 import pandas as pd
 import cufflinks as cf
 import yfinance as yf 
+import pandas_ta as ta
 
 @st.cache_data
 def getsp500_Symbol():
