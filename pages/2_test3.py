@@ -51,6 +51,8 @@ if chosen == 'S&P 500':
         st.warning("NO Website")
     st.info(get_stock_info(options)['longBusinessSummary'])
 
+    get_stock_info(options)
+
 
 if chosen == 'Nasdaq':
 
