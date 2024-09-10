@@ -64,6 +64,7 @@ else:  # chosen == 'Nasdaq'
 
 stock_price = get_price(options)
 
+@st.cache_data
 def calculate_price_difference(stock_data):
     latest_price = stock_data.iloc[-1]["Close"]
     previous_year_price = stock_data.iloc[-252]["Close"] if len(stock_data) > 252 else stock_data.iloc[0]["Close"]
