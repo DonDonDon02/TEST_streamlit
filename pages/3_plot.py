@@ -146,9 +146,10 @@ except:
 
 
 
-
+tickerData = yf.Ticker(options) # Get ticker data
+cando = tickerData.history(period='1d', start=start_date, end=end_date)
 
 st.subheader("Candlestick Chart")
-candlestick_chart = go.Figure(data=[go.Candlestick(x=data2.index, open=data2['Open'], high=data2['High'], low=data2['Low'], close=data2['Close'])])
+candlestick_chart = go.Figure(data=[go.Candlestick(x=cando.index, open=cando['Open'], high=cando['High'], low=cando['Low'], close=cando['Close'])])
 candlestick_chart.update_layout(title=f"{options} Candlestick Chart", xaxis_rangeslider_visible=False)
 st.plotly_chart(candlestick_chart, use_container_width=True)
