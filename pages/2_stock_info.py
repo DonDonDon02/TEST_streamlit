@@ -61,7 +61,7 @@ if chosen == 'S&P 500':
     "52 Week High": info.get('fiftyTwoWeekHigh', 'N/A'),
     "52 Week Low": info.get('fiftyTwoWeekLow', 'N/A'),
     }
-
+    st.write(info['website'])
     st.table(info_display)
     st.write(info)
 
