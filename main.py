@@ -25,33 +25,33 @@ username = st.secrets['DATABASE_USERNAME']
 password = st.secrets['DATABASE_PASSWORD']
 driver = '{ODBC Driver 17 for SQL Server}'
 
- 
-with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password) as conn:
-    with conn.cursor() as cursor:
-        # Execute the query
-        cursor.execute('''
-      SELECT TOP (1000) [id]
-      ,[date]
-      ,[open]
-      ,[high]
-      ,[low]
-      ,[close]
-      ,[volume]
-      ,[code]
-      ,[diff]
-  FROM [dbo].[sp500_stock_data]
+
+# with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password) as conn:
+#     with conn.cursor() as cursor:
+#         # Execute the query
+#         cursor.execute('''
+#       SELECT TOP (1000) [id]
+#       ,[date]
+#       ,[open]
+#       ,[high]
+#       ,[low]
+#       ,[close]
+#       ,[volume]
+#       ,[code]
+#       ,[diff]
+#   FROM [dbo].[sp500_stock_data]
             
-        ''')
+#         ''')
 
-        # Fetch all rows
-        rows = cursor.fetchall()
+#         # Fetch all rows
+#         rows = cursor.fetchall()
 
-        # Convert to DataFrame
-        df = pd.DataFrame.from_records(rows, columns=[desc[0] for desc in cursor.description])
+#         # Convert to DataFrame
+#         df = pd.DataFrame.from_records(rows, columns=[desc[0] for desc in cursor.description])
 
 # Display the DataFrame
 
 
-st.write(df,df.columns)
+st.write("Hello")
 
 
