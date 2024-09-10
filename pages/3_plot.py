@@ -1,5 +1,6 @@
 import streamlit as st 
 import pyodbc
+from numpy import NaN
 import pandas as pd
 import cufflinks as cf
 import yfinance as yf 

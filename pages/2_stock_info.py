@@ -1,6 +1,5 @@
 import streamlit as st 
 import numpy as np
-from numpy import NaN
 import pyodbc
 import pandas as pd
 import cufflinks as cf
