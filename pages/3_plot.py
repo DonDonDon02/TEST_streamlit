@@ -77,5 +77,6 @@ if chosen == 'S&P 500':
     df.reset_index(inplace=True)
     df = df.round(2)
     df['Date'] = df['Date'].dt.strftime('%Y/%m/%d')
+    st.title(options)
     df.set_index('Date', inplace=True)
     st.line_chart(df['Close'])

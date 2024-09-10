@@ -41,17 +41,28 @@ options2 = st.sidebar.selectbox(
 
 if chosen == 'S&P 500':
 
-   
+    info = get_stock_info(options)
 
-    st.header(get_stock_info(options)['longName'])
+    st.header(info['longName'])
     st.write('---')
     try:
-        st.write(get_stock_info(options)['irWebsite'])
+        st.write(info['irWebsite'])
     except:
         st.warning("NO Website")
-    st.info(get_stock_info(options)['longBusinessSummary'])
+    st.info(info['longBusinessSummary'])
 
-    get_stock_info(options)
+    info_display = {
+    "Company Name": info.get("longName", "N/A"),
+    "Sector": info.get("sector", "N/A"),
+    "Industry": info.get("industry", "N/A"),
+    "Current Price": info.get('currentPrice', 'N/A'),
+    "Market Cap": info.get('marketCap', 'N/A'),
+    "52 Week High": round(info.get('fiftyTwoWeekHigh', 'N/A'),2),
+    "52 Week Low": round(info.get('fiftyTwoWeekLow', 'N/A'),2),
+    }
+
+    st.table(info_display)
+
 
 
 if chosen == 'Nasdaq':
@@ -67,6 +78,5 @@ if chosen == 'Nasdaq':
     except:
         st.warning("NO Website")
     st.info(get_stock_info(options2)['longBusinessSummary'])
-
 
 
