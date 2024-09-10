@@ -74,6 +74,7 @@ else:  # chosen == 'Nasdaq'
     options = st.sidebar.selectbox(
         "Select Nasdaq Symbol",
         nq_Symbol()['Symbol'].unique().tolist(),
+        
     )
 
 stock_price = get_price(options)
