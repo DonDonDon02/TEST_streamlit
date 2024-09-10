@@ -46,6 +46,19 @@ def get_price(code):
     data = data.round(2)
     return data
     
+@st.cache_data
+def get_price2(code):
+    stock = yf.Ticker(code)
+    data = stock.history(period='1d', start=start_date, end=end_date)
+    if data.empty:
+            st.warning(f"No data found for {code}. This symbol may be delisted.")
+            return pd.DataFrame()  # Return an empty DataFrame
+    data.reset_index(inplace=True)
+    data['Date'] = data['Date'].dt.strftime('%Y/%m/%d')
+    data["Code"] = code
+    data = data.drop(columns=['Dividends', 'Stock Splits'])
+    data2 = data.round(2)
+    return data2
 
 start_date = st.sidebar.date_input("Start date", datetime.date(2019, 1, 1))
 end_date = st.sidebar.date_input("End date", datetime.date.today())
@@ -64,6 +77,8 @@ else:  # chosen == 'Nasdaq'
     )
 
 stock_price = get_price(options)
+
+data2 = get_price2(options)
 
 @st.cache_data
 def calculate_price_difference(stock_data):
@@ -129,3 +144,11 @@ except:
     
 
 
+
+
+
+
+st.subheader("Candlestick Chart")
+candlestick_chart = go.Figure(data=[go.Candlestick(x=data2.index, open=data2['Open'], high=data2['High'], low=data2['Low'], close=data2['Close'])])
+candlestick_chart.update_layout(title=f"{options} Candlestick Chart", xaxis_rangeslider_visible=False)
+st.plotly_chart(candlestick_chart, use_container_width=True)
