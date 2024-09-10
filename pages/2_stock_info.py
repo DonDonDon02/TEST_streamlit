@@ -47,7 +47,7 @@ if chosen == 'S&P 500':
     st.header(info['longName'])
     st.write('---')
     try:
-        st.write(info['irWebsite'])
+        st.write(info['website'])
     except:
         st.warning("NO Website")
     st.info(info['longBusinessSummary'])
@@ -63,6 +63,7 @@ if chosen == 'S&P 500':
     }
 
     st.table(info_display)
+    st.write(info)
 
 
 
