@@ -55,10 +55,10 @@ if chosen == 'S&P 500':
     "Company Name": info.get("longName", "N/A"),
     "Sector": info.get("sector", "N/A"),
     "Industry": info.get("industry", "N/A"),
-    "Current Price": round(info.get('currentPrice', 'N/A'),2),
+    "Current Price": info.get('currentPrice', 'N/A'),
     "Market Cap": info.get('marketCap', 'N/A'),
-    "52 Week High": round(info.get('fiftyTwoWeekHigh', 'N/A'),2),
-    "52 Week Low": round(info.get('fiftyTwoWeekLow', 'N/A'),2),
+    "52 Week High": info.get('fiftyTwoWeekHigh', 'N/A'),
+    "52 Week Low": info.get('fiftyTwoWeekLow', 'N/A'),
     }
 
     st.table(info_display)
