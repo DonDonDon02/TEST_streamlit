@@ -8,3 +8,4 @@ prophet==1.1.5
 numpy
 plotly
 pandas_ta
+matplotlib

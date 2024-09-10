@@ -5,8 +5,9 @@ import cufflinks as cf
 import yfinance as yf 
 import datetime
 import plotly.express as px 
+import pandas_ta as ta 
 
-
+ta.ma
 
 @st.cache_data
 def getsp500_Symbol():
