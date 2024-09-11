@@ -139,8 +139,11 @@ try:
     tickerData = yf.Ticker(options) # Get ticker data
     cando = tickerData.history(period='1d', start=start_date, end=end_date)
     cando['MA14'] = cando['Close'].rolling(window=14).mean()
+    cando['MA1'] = cando['Close'].rolling(window=1).mean()
+
     candlestick_chart = go.Figure(data=[go.Candlestick(x=cando.index, open=cando['Open'], high=cando['High'], low=cando['Low'], close=cando['Close'])])
     candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA14'], mode='lines', line=dict(color='blue', width=1.5), name='MA 14'))
+    candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA1'], mode='lines', line=dict(color='red', width=1.5), name='MA 1'))
     candlestick_chart.update_layout(xaxis_rangeslider_visible=False)
     st.plotly_chart(candlestick_chart, use_container_width=True)
 except:
