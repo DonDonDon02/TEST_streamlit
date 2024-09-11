@@ -48,6 +48,7 @@ info = get_stock_info(options)
 
 try:
     st.header(info['longName'])
+    st.subheader(options)
     st.write('---')
     st.write(info['website'])
 except:
@@ -64,9 +65,13 @@ info_display = {
 }
 #st.write(info['website'])
 st.table(info_display)
-st.write(info)
 
 
+with st.expander("Show more info"):
+   st.write(info)
+
+if st.button("Click me"):
+    pass
 
 # if chosen == 'Nasdaq':
 
