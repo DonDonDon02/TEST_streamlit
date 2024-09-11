@@ -60,9 +60,6 @@ def get_price2(code):
     data2 = data.round(2)
     return data2
 
-start_date = st.sidebar.date_input("Start date", datetime.date(2019, 1, 1))
-end_date = st.sidebar.date_input("End date", datetime.date.today())
-
 chosen = st.sidebar.radio('Select', ("S&P 500", "Nasdaq"))
 
 if chosen == 'S&P 500':
@@ -76,6 +73,11 @@ else:  # chosen == 'Nasdaq'
         nq_Symbol()['Symbol'].unique().tolist(),
         
     )
+
+start_date = st.sidebar.date_input("Start date", datetime.date(2019, 1, 1))
+end_date = st.sidebar.date_input("End date", datetime.date.today())
+
+
 
 stock_price = get_price(options)
 
@@ -131,15 +133,16 @@ with col4:
     
 
 try:
-    tickerData = yf.Ticker(options) # Get ticker data
-    df = tickerData.history(period='1d', start=start_date, end=end_date) #get the historical prices for this ticker
-    df.reset_index(inplace=True)
-    df = df.round(2)
-    df['Date'] = df['Date'].dt.strftime('%Y/%m/%d')
+
     st.title(f'{options} - {get_stock_info(options)["longName"]}') 
     
-    df.set_index('Date', inplace=True)
-    st.line_chart(df['Close'])
+    tickerData = yf.Ticker(options) # Get ticker data
+    cando = tickerData.history(period='1d', start=start_date, end=end_date)
+    cando['MA14'] = cando['Close'].rolling(window=14).mean()
+    candlestick_chart = go.Figure(data=[go.Candlestick(x=cando.index, open=cando['Open'], high=cando['High'], low=cando['Low'], close=cando['Close'])])
+    candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA14'], mode='lines', line=dict(color='blue', width=1.5), name='MA 14'))
+    candlestick_chart.update_layout(xaxis_rangeslider_visible=False)
+    st.plotly_chart(candlestick_chart, use_container_width=True)
 except:
     st.warning("Stock not available")
     
@@ -147,10 +150,3 @@ except:
 
 
 
-tickerData = yf.Ticker(options) # Get ticker data
-cando = tickerData.history(period='1d', start=start_date, end=end_date)
-
-st.subheader("Candlestick Chart")
-candlestick_chart = go.Figure(data=[go.Candlestick(x=cando.index, open=cando['Open'], high=cando['High'], low=cando['Low'], close=cando['Close'])])
-candlestick_chart.update_layout(title=f"{options} Candlestick Chart", xaxis_rangeslider_visible=False)
-st.plotly_chart(candlestick_chart, use_container_width=True)

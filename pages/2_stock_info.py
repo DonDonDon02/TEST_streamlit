@@ -29,40 +29,56 @@ def get_stock_info(ticker):
 
 chosen = st.sidebar.radio('Select', ("S&P 500", "Nasdaq"))
 
-if chosen == 'S&P 500':
-    options = st.sidebar.selectbox(
-        "Select S&P 500 Symbol",
+options = st.sidebar.selectbox(
+        "S&P 500",
         getsp500_Symbol()['Symbol'].unique().tolist(),
     )
-else:  # chosen == 'Nasdaq'
-    options = st.sidebar.selectbox(
-        "Select Nasdaq Symbol",
+
+options2 = st.sidebar.selectbox(
+        "nasdaq",
         nq_Symbol()['Symbol'].unique().tolist(),
     )
 
 
+if chosen == 'S&P 500':
+
+    info = get_stock_info(options)
+
+    st.header(info['longName'])
+    st.write('---')
+    try:
+        st.write(info['website'])
+    except:
+        st.warning("NO Website")
+    st.write(info['longBusinessSummary'])
+
+    info_display = {
+    "Company Name": info.get("longName", "N/A"),
+    "Sector": info.get("sector", "N/A"),
+    "Industry": info.get("industry", "N/A"),
+    "Current Price": info.get('currentPrice', 'N/A'),
+    "Market Cap": info.get('marketCap', 'N/A'),
+    "52 Week High": info.get('fiftyTwoWeekHigh', 'N/A'),
+    "52 Week Low": info.get('fiftyTwoWeekLow', 'N/A'),
+    }
+    #st.write(info['website'])
+    st.table(info_display)
+    st.write(info)
 
 
 
-info = get_stock_info(options)
-st.header(info['longName'])
-st.write('---')
-try:
-    st.write(info['website'])
-except:
-    st.warning("NO Website")
-st.info(info['longBusinessSummary'])
-info_display = {
-"Company Name": info.get("longName", "N/A"),
-"Sector": info.get("sector", "N/A"),
-"Industry": info.get("industry", "N/A"),
-"Current Price": info.get('currentPrice', 'N/A'),
-"Market Cap": info.get('marketCap', 'N/A'),
-"52 Week High": info.get('fiftyTwoWeekHigh', 'N/A'),
-"52 Week Low": info.get('fiftyTwoWeekLow', 'N/A'),
-}
-#st.write(info['website'])
-st.table(info_display)
-st.write(info)
+if chosen == 'Nasdaq':
+
+    try:
+
+        st.header(get_stock_info(options2)['longName'])
+    except:
+        st.warning("NOT FOUND ")
+    st.write('---')
+    try:
+        st.write(get_stock_info(options2)['irWebsite'])
+    except:
+        st.warning("NO Website")
+    st.info(get_stock_info(options2)['longBusinessSummary'])
 
 
