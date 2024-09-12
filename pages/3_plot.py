@@ -10,6 +10,7 @@ import pandas_ta as ta
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
+
 #ta.ma
 
 @st.cache_data
@@ -169,15 +170,13 @@ with st.sidebar.expander("Exponential Moving avg"):
 try:
 
     st.title(f'{options} - {get_stock_info(options)["longName"]}')
- 
-    
-
-
-
-
 
  
     fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    
+
+
 
     # include candlestick with rangeselector
     fig.add_trace(go.Candlestick(x=cando.index,
@@ -188,6 +187,7 @@ try:
     fig.add_trace(go.Bar(x=cando.index, y=cando['Volume'],
                         name='vol',opacity=0.5),  # Name for the trace
                 secondary_y=False)
+    
 
     if ma1_checkbox:
         cando['MA1'] = cando['Close']
@@ -218,8 +218,7 @@ try:
         cando['EMA100'] = ta.ema(cando['Close'], length=100)
         fig.add_trace(go.Scatter(x=cando.index, y=cando['EMA100'], mode='lines', line=dict(color='orange', width=1.5), name='EMA 100'),secondary_y=True)
 
-    # include a go.Bar trace for volumes
-
+    
     fig.layout.yaxis2.showgrid=False
     fig.update_layout(xaxis_rangeslider_visible=False)
     st.plotly_chart(fig, use_container_width=True)
@@ -229,6 +228,32 @@ except:
 
 #cando.reset_index(inplace=True)
 #cando['Date'] = cando['Date'].dt.strftime('%Y/%m/%d')
+
+cando['RSI'] = ta.rsi(cando['Close'], length=14)
+
+fig = go.Figure()
+
+# Add price data
+fig.add_trace(go.Scatter(x=cando.index, y=cando['Close'], mode='lines', name='Close Price'))
+
+# Add RSI data
+fig.add_trace(go.Scatter(x=cando.index, y=cando['RSI'], mode='lines', name='RSI', yaxis='y2',line=dict(color='red')  # Set RSI line color to red
+))
+# Update layout
+fig.update_layout(
+    title='Close Price and RSI',
+    yaxis_title='Close Price',
+    yaxis2=dict(
+        title='RSI',
+        overlaying='y',
+        side='right',
+        range=[0, 100]
+    ),
+)
+
+fig.layout.yaxis2.showgrid=False
+fig.update_layout(xaxis_rangeslider_visible=False)
+st.plotly_chart(fig, use_container_width=True)
 
 
 
