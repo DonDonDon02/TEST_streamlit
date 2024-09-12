@@ -75,9 +75,23 @@ else:  # chosen == 'Nasdaq'
         
     )
 
+
+
 start_date = st.sidebar.date_input("Start date", datetime.date(2019, 1, 1))
 end_date = st.sidebar.date_input("End date", datetime.date.today())
 
+tickerData = yf.Ticker(options) # Get ticker data
+cando = tickerData.history(period='1d', start=start_date, end=end_date)
+
+if st.sidebar.button("Export CSV"):
+    csv = cando.to_csv(index=False)
+    st.sidebar.download_button(
+        label="Download CSV",
+        data=csv,
+        file_name=f'{options}{start_date}--{end_date}data.csv',
+        mime='text/csv'
+    )
+    st.sidebar.write("CSV file is ready to download!")
 
 
 stock_price = get_price(options)
@@ -139,14 +153,20 @@ with st.sidebar.expander("moving avg"):
     ma50_checkbox = st.checkbox("MA50")
     ma100_checkbox = st.checkbox("MA100")
 
-ema14_checkbox = st.sidebar.checkbox("EMA14")
+
+    
+
+with st.sidebar.expander("Exponential Moving avg"):
+    ema14_checkbox = st.checkbox("EMA14")
+    ema50_checkbox = st.checkbox("EMA50")
+    ema100_checkbox = st.checkbox("EMA100")
+
 try:
 
     st.title(f'{options} - {get_stock_info(options)["longName"]}')
  
     
-    tickerData = yf.Ticker(options) # Get ticker data
-    cando = tickerData.history(period='1d', start=start_date, end=end_date)
+
 
 
 
@@ -182,8 +202,16 @@ try:
 
     if ema14_checkbox:
         cando['EMA14'] = ta.ema(cando['Close'], length=14)
-        fig.add_trace(go.Scatter(x=cando.index, y=cando['EMA14'], mode='lines', line=dict(color='orange', width=1.5), name='MA 14'),secondary_y=True)
+        fig.add_trace(go.Scatter(x=cando.index, y=cando['EMA14'], mode='lines', line=dict(color='blue', width=1.5), name='EMA 14'),secondary_y=True)
 
+
+    if ema50_checkbox:
+        cando['EMA50'] = ta.ema(cando['Close'], length=50)
+        fig.add_trace(go.Scatter(x=cando.index, y=cando['EMA50'], mode='lines', line=dict(color='green', width=1.5), name='EMA 50'),secondary_y=True)
+
+    if ema100_checkbox:
+        cando['EMA100'] = ta.ema(cando['Close'], length=100)
+        fig.add_trace(go.Scatter(x=cando.index, y=cando['EMA100'], mode='lines', line=dict(color='orange', width=1.5), name='EMA 100'),secondary_y=True)
 
     # include a go.Bar trace for volumes
 
