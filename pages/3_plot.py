@@ -8,6 +8,7 @@ import datetime
 import plotly.express as px 
 import pandas_ta as ta 
 import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 
 #ta.ma
 
@@ -130,25 +131,89 @@ with col3:
     st.metric("52-Week High", f"${max_52_week_high:.2f}")
 with col4:
     st.metric("52-Week Low", f"${min_52_week_low:.2f}")
-    
 
+
+
+
+ma1_checkbox= st.sidebar.checkbox("MA1")
+ma14_checkbox= st.sidebar.checkbox("MA14")
+ma50_checkbox = st.sidebar.checkbox("MA50")
+ma100_checkbox = st.sidebar.checkbox("MA100")
 try:
 
-    st.title(f'{options} - {get_stock_info(options)["longName"]}') 
+    st.title(f'{options} - {get_stock_info(options)["longName"]}')
+ 
     
     tickerData = yf.Ticker(options) # Get ticker data
     cando = tickerData.history(period='1d', start=start_date, end=end_date)
+
     cando['MA14'] = cando['Close'].rolling(window=14).mean()
-    cando['MA1'] = cando['Close'].rolling(window=1).mean()
+    cando['MA1'] = cando['Close']
+    cando['MA50'] = cando['Close'].rolling(window=50).mean()
+    cando['MA100'] = cando['Close'].rolling(window=100).mean()
+ 
+    candlestick_chart = fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     candlestick_chart = go.Figure(data=[go.Candlestick(x=cando.index, open=cando['Open'], high=cando['High'], low=cando['Low'], close=cando['Close'])])
-    candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA14'], mode='lines', line=dict(color='blue', width=1.5), name='MA 14'))
-    candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA1'], mode='lines', line=dict(color='red', width=1.5), name='MA 1'))
+
+    if ma1_checkbox:
+        candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA1'], mode='lines', line=dict(color='red', width=1.5), name='MA 1'))
+
+    if ma14_checkbox:
+        candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA14'], mode='lines', line=dict(color='blue', width=1.5), name='MA 14'))
+
+    
+    if ma50_checkbox:
+        candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA50'], mode='lines', line=dict(color='green', width=1.5), name='MA 50'))
+        
+    if ma100_checkbox:
+        candlestick_chart.add_trace(go.Scatter(x=cando.index, y=cando['MA100'], mode='lines', line=dict(color='orange', width=1.5), name='MA 100'))
+
+
+
+
+
     candlestick_chart.update_layout(xaxis_rangeslider_visible=False)
     st.plotly_chart(candlestick_chart, use_container_width=True)
 except:
     st.warning("Stock not available")
     
+
+#cando.reset_index(inplace=True)
+#cando['Date'] = cando['Date'].dt.strftime('%Y/%m/%d')
+
+
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+# include candlestick with rangeselector
+fig.add_trace(go.Candlestick(x=cando.index,
+                open=cando['Open'], high=cando['High'],
+                low=cando['Low'], close=cando['Close'],name = 'K'),
+               secondary_y=True)
+
+if ma1_checkbox:
+    fig.add_trace(go.Scatter(x=cando.index, y=cando['MA1'], mode='lines', line=dict(color='red', width=1.5), name='MA 1'),secondary_y=True)
+
+if ma14_checkbox:
+    fig.add_trace(go.Scatter(x=cando.index, y=cando['MA14'], mode='lines', line=dict(color='blue', width=1.5), name='MA 14'),secondary_y=True)
+
+if ma50_checkbox:
+    fig.add_trace(go.Scatter(x=cando.index, y=cando['MA50'], mode='lines', line=dict(color='green', width=1.5), name='MA 50'))
+    
+if ma100_checkbox:
+    fig.add_trace(go.Scatter(x=cando.index, y=cando['MA100'], mode='lines', line=dict(color='orange', width=1.5), name='MA 100'))
+
+
+
+
+# include a go.Bar trace for volumes
+fig.add_trace(go.Bar(x=cando.index, y=cando['Volume'],
+                     name='vol'),  # Name for the trace
+              secondary_y=False)
+
+fig.layout.yaxis2.showgrid=False
+fig.update_layout(xaxis_rangeslider_visible=False)
+st.plotly_chart(fig, use_container_width=True)
 
 
 
