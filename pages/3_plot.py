@@ -83,8 +83,12 @@ end_date = st.sidebar.date_input("End date", datetime.date.today())
 tickerData = yf.Ticker(options) # Get ticker data
 cando = tickerData.history(period='1d', start=start_date, end=end_date)
 
+
 if st.sidebar.button("Export CSV"):
-    csv = cando.to_csv(index=False)
+    cando_for_csv = cando
+    cando_for_csv.reset_index(inplace=True)
+    cando_for_csv['Date'] = cando_for_csv['Date'].dt.strftime('%Y/%m/%d')
+    csv = cando_for_csv.to_csv(index=False)
     st.sidebar.download_button(
         label="Download CSV",
         data=csv,
@@ -92,6 +96,7 @@ if st.sidebar.button("Export CSV"):
         mime='text/csv'
     )
     st.sidebar.write("CSV file is ready to download!")
+
 
 
 stock_price = get_price(options)
