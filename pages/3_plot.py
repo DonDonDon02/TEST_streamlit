@@ -11,6 +11,7 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
 
+
 #ta.ma
 
 @st.cache_data
@@ -178,15 +179,16 @@ try:
 
 
 
+
     # include candlestick with rangeselector
     fig.add_trace(go.Candlestick(x=cando.index,
                     open=cando['Open'], high=cando['High'],
                     low=cando['Low'], close=cando['Close'],name = 'K'),
                 secondary_y=True)
 
-    fig.add_trace(go.Bar(x=cando.index, y=cando['Volume'],
-                        name='vol',opacity=0.5),  # Name for the trace
-                secondary_y=False)
+    fig.add_trace(go.Bar(x=cando.index, y=cando['Volume'], 
+                              marker=dict(color=['green' if close >= open else 'red' for close, open in zip(cando['Close'], cando['Open'])]),
+                              name='Volume',opacity=0.5))
     
 
     if ma1_checkbox:
