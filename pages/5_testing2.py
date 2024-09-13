@@ -1,16 +1,21 @@
 import streamlit as st
+import pandas as pd
 
-# Initialize session state
-if 'data' not in st.session_state:
-    st.session_state['data'] = []
+# Initialize session state to store a DataFrame
+if 'df' not in st.session_state:
+    st.session_state.df = pd.DataFrame(columns=['Name', 'Age'])
 
-# Function to add data to session state
-def add_data(new_data):
-    st.session_state.data.append(new_data)
+# Function to add new row to DataFrame
+def add_data(name, age):
+    new_row = {'Name': name, 'Age': age}
+    st.session_state.df = st.session_state.df._append(new_row, ignore_index=True)
 
-# User input to add data
-user_input = st.text_input("Enter some data")
+# User input for Name and Age
+name = st.text_input("Enter name")
+age = st.number_input("Enter age", min_value=0, step=1)
 
 if st.button("Add Data"):
-    add_data(user_input)
-    st.write(f"Data stored: {st.session_state.data}")
+    add_data(name, age)
+
+# Display the DataFrame
+st.write(st.session_state.df)

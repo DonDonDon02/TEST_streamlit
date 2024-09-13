@@ -1,4 +1,4 @@
-# Stock Analysis App
+# Stock Analysis App 
 
 ## Overview
 This project is a Streamlit application that allows users to analyze stock data for companies listed in the S&P 500 and Nasdaq. Users can filter companies by GICS sector and sub-industry, view historical stock performance, and visualize key metrics such as moving averages and the Relative Strength Index (RSI).
