@@ -49,19 +49,19 @@ def get_price(code):
     data = data.round(2)
     return data
     
-@st.cache_data
-def get_price2(code):
-    stock = yf.Ticker(code)
-    data = stock.history(period='1d', start=start_date, end=end_date)
-    if data.empty:
-            st.warning(f"No data found for {code}. This symbol may be delisted.")
-            return pd.DataFrame()  # Return an empty DataFrame
-    data.reset_index(inplace=True)
-    data['Date'] = data['Date'].dt.strftime('%Y/%m/%d')
-    data["Code"] = code
-    data = data.drop(columns=['Dividends', 'Stock Splits'])
-    data2 = data.round(2)
-    return data2
+# @st.cache_data
+# def get_price2(code):
+#     stock = yf.Ticker(code)
+#     data = stock.history(period='1d', start=start_date, end=end_date)
+#     if data.empty:
+#             st.warning(f"No data found for {code}. This symbol may be delisted.")
+#             return pd.DataFrame()  # Return an empty DataFrame
+#     data.reset_index(inplace=True)
+#     data['Date'] = data['Date'].dt.strftime('%Y/%m/%d')
+#     data["Code"] = code
+#     data = data.drop(columns=['Dividends', 'Stock Splits'])
+#     data2 = data.round(2)
+#     return data2
 
 chosen = st.sidebar.radio('Select', ("S&P 500", "Nasdaq"))
 
@@ -103,7 +103,7 @@ if st.sidebar.button("Export CSV"):
 
 stock_price = get_price(options)
 
-data2 = get_price2(options)
+#data2 = get_price2(options)
 
 @st.cache_data
 def calculate_price_difference(stock_data):
