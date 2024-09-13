@@ -86,16 +86,23 @@ st.write(get_price(options,buy_date,buy_date_next))
 if st.button("Add Data"):
     add_data(Code ,Date ,Close ,Number_of_Shares ,Total_Value ,)
 
-# Display the DataFrame
-st.write(st.session_state.df)
+
+
+with st.expander("Show buy record"):
+    st.write(st.session_state.df)
+
 
 
 grouped = st.session_state.df.groupby('Code').agg({
     'Number of Shares': 'sum',
     'Total Value': 'sum',
-    'Close': 'mean'
+
 }).reset_index()
 
-grouped = grouped.rename(columns={'Close': 'Avg Price'})
+grouped['avg price'] = grouped['Total Value'] / grouped['Number of Shares']
 
 st.write(grouped)
+
+
+
+
