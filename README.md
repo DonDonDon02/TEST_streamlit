@@ -4,14 +4,12 @@
 This project is a Streamlit application that allows users to analyze stock data for companies listed in the S&P 500 and Nasdaq. Users can filter companies by GICS sector and sub-industry, view historical stock performance, and visualize key metrics such as moving averages and the Relative Strength Index (RSI).
 
 ## Features
-- **Data Visualization**: Display stock prices using candlestick charts and moving averages.
-- **Stock Filtering**: Filter companies by sector and sub-industry.
-- **Historical Data**: Fetch and display historical stock data for selected companies.
-- **Metrics Display**: Show important financial metrics such as current price, market cap, 52-week high/low, and more.
-- **Downloadable Data**: Export historical stock data as a CSV file.
 
-## Requirements
-To run this application, ensure you have the following Python packages installed:
+- **Stock Information and Overview**: Users can view company details, stock prices, and market data for S&P 500 and Nasdaq companies.
+- **Data Filtering and Visualization**: Filter companies based on sectors and sub-industries, and visualize stock performance with candlestick charts and moving averages.
+- **Stock Metrics and Indicators**: View key metrics such as 52-week high/low, relative strength index (RSI), and moving averages (MA, EMA).
+- **Portfolio Management**: Users can simulate buying and selling stocks, track their portfolio, and view a summary of holdings.
+
 
 - `streamlit`
 - `pandas==2.2.2`
@@ -55,7 +53,8 @@ please install `Version 17`
    ```
 
 3. **Interact with the App**:
-   - Use the sidebar to select between S&P 500 and Nasdaq.
-   - Choose a specific stock symbol to view its data.
-   - Use the filters to narrow down your search based on sector and sub-industry.
-   - Visualize stock performance and metrics.
+ -  Use the sidebar to select companies from S&P 500 or Nasdaq.
+ - Visualize stock performance with interactive charts.
+ - Filter companies by sector or sub-industry.
+ - Simulate buying and selling stocks.
+ - Track your portfolio and view holdings in real time.
