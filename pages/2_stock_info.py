@@ -5,6 +5,7 @@ import pandas as pd
 import cufflinks as cf
 import yfinance as yf 
 
+st.set_page_config(layout="centered")
 
 @st.cache_data
 def getsp500_Symbol():

@@ -87,9 +87,108 @@ with col3:
 with col4:
     st.metric("52-Week Low",diff)
     
+########################################################################################################################
 
+import streamlit as st
+import yfinance as yf
+import pandas as pd
+import datetime
 
-buy_record_df = pd.concat([buy_record_df, buy_data], ignore_index=True)
+# Set up the main title and sidebar header
+st.title("Stock Trading Simulation App")
+st.sidebar.header("Configure Trading Simulation")
 
-st.write(buy_record)
+# Sidebar inputs for stock selection and date range
+symbol = st.sidebar.text_input("Enter Stock Symbol", value='AAPL')
+start_date = st.sidebar.date_input("Start Date", datetime.date(2020, 1, 1))
+end_date = st.sidebar.date_input("End Date", datetime.date.today())
 
+# Fetch stock data using yfinance
+if symbol:
+    data = yf.download(symbol, start=start_date, end=end_date)
+    if not data.empty:
+        st.subheader(f"Price Data for {symbol}")
+        st.line_chart(data['Close'])
+    else:
+        st.error("No data found for the entered symbol.")
+
+# Initialize session state to store portfolio information
+if 'portfolio' not in st.session_state:
+    st.session_state.portfolio = {
+        'Cash': 10000,  # Starting cash balance
+        'Positions': {},  # Dictionary to hold stock positions
+        'Transaction History': []  # List to record transactions
+    }
+
+portfolio = st.session_state.portfolio
+
+st.sidebar.subheader("Trading Actions")
+
+# Input for buying stocks
+buy_quantity = st.sidebar.number_input("Buy Quantity", min_value=1, value=10)
+if st.sidebar.button("Buy"):
+    if not data.empty:
+        price = data['Close'][-1]
+        cost = buy_quantity * price
+        if portfolio['Cash'] >= cost:
+            portfolio['Cash'] -= cost
+            portfolio['Positions'][symbol] = portfolio['Positions'].get(symbol, 0) + buy_quantity
+            portfolio['Transaction History'].append({
+                'Type': 'Buy',
+                'Symbol': symbol,
+                'Quantity': buy_quantity,
+                'Price': price,
+                'Date': datetime.datetime.now()
+            })
+            st.sidebar.success(f"Bought {buy_quantity} shares of {symbol} at ${price:.2f}")
+        else:
+            st.sidebar.error("Insufficient cash to complete the purchase.")
+    else:
+        st.sidebar.error("No price data available to execute the trade.")
+
+# Input for selling stocks
+sell_quantity = st.sidebar.number_input("Sell Quantity", min_value=1, value=10)
+if st.sidebar.button("Sell"):
+    if not data.empty:
+        if portfolio['Positions'].get(symbol, 0) >= sell_quantity:
+            price = data['Close'][-1]
+            revenue = sell_quantity * price
+            portfolio['Cash'] += revenue
+            portfolio['Positions'][symbol] -= sell_quantity
+            portfolio['Transaction History'].append({
+                'Type': 'Sell',
+                'Symbol': symbol,
+                'Quantity': sell_quantity,
+                'Price': price,
+                'Date': datetime.datetime.now()
+            })
+            st.sidebar.success(f"Sold {sell_quantity} shares of {symbol} at ${price:.2f}")
+        else:
+            st.sidebar.error(f"Not enough shares of {symbol} to sell.")
+    else:
+        st.sidebar.error("No price data available to execute the trade.")
+
+# Display portfolio summary
+st.header("Portfolio Summary")
+
+# Display cash balance
+st.write(f"**Cash Balance:** ${portfolio['Cash']:.2f}")
+
+# Display current stock positions
+if portfolio['Positions']:
+    positions_df = pd.DataFrame.from_dict(
+        portfolio['Positions'], orient='index', columns=['Quantity']
+    )
+    positions_df.index.name = 'Symbol'
+    st.write("**Positions:**")
+    st.table(positions_df)
+else:
+    st.write("No positions held.")
+
+# Display transaction history
+if portfolio['Transaction History']:
+    history_df = pd.DataFrame(portfolio['Transaction History'])
+    st.write("**Transaction History:**")
+    st.table(history_df)
+else:
+    st.write("No transactions made yet.")

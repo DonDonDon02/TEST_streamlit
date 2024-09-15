@@ -5,6 +5,7 @@ import cufflinks as cf
 import datetime
 import ssl
  
+st.set_page_config(layout="centered")
 
 
 ssl._create_default_https_context = ssl._create_unverified_context

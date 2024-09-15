@@ -3,6 +3,10 @@ import pandas as pd
 import datetime
 import yfinance as yf 
 
+st.set_page_config(layout="wide")
+
+
+
 @st.cache_data
 def getsp500_Symbol():
     sp500_csv_= pd.read_csv('https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv')
@@ -68,28 +72,55 @@ def add_data(Code ,Date ,Close ,Number_of_Shares ,Total_Value ,):
     st.session_state.df = st.session_state.df._append(new_row, ignore_index=True)
 
 # User input for Name and Age
-name = st.text_input("Enter name")
 
-try:
-    data = get_price(options,buy_date,buy_date_next)
-except:
-    st.warning("weekend market close / Not avilble ")
-Number_of_Shares_ = st.number_input("Number_of_Shares_", min_value=1, step=1)
+col1, col2= st.columns(2)
 
-Code = data['Code'].iloc[0]
-Date = data['Date'].iloc[0]
-Close = data['Close'].iloc[0]
-Number_of_Shares = Number_of_Shares_
-Total_Value = Number_of_Shares_ * Close
+with col1:
 
-st.write(get_price(options,buy_date,buy_date_next))
-if st.button("Add Data"):
-    add_data(Code ,Date ,Close ,Number_of_Shares ,Total_Value ,)
+    try:
+        data = get_price(options,buy_date,buy_date_next)
+    except:
+        st.warning("weekend market close / Not avilble ")
+    Number_of_Shares_ = st.number_input("Number_of_Shares_Buy", min_value=1, step=1)
+
+    Code_buy = data['Code'].iloc[0]
+    Date_buy = data['Date'].iloc[0]
+    Close_buy = data['Close'].iloc[0]
+    Number_of_Shares_buy = Number_of_Shares_
+    Total_Value_buy = Number_of_Shares_ * Close_buy
+
+    st.write(get_price(options,buy_date,buy_date_next))
+    if st.button("Buy"):
+        add_data(Code_buy ,Date_buy ,Close_buy ,Number_of_Shares_buy ,Total_Value_buy ,)
 
 
 
-with st.expander("Show buy record"):
-    st.write(st.session_state.df)
+    with st.expander("Show buy record"):
+        st.write(st.session_state.df)
+        
+
+with col2:
+
+    try:
+        data = get_price(options,buy_date,buy_date_next)
+    except:
+        st.warning("weekend market close / Not avilble ")
+    Number_of_Shares_Sell = st.number_input("Number_of_Shares_Sell", min_value=1, step=1)
+
+    Code_buy = data['Code'].iloc[0]
+    Date_buy = data['Date'].iloc[0]
+    Close_buy = data['Close'].iloc[0]
+    Number_of_Shares_buy = Number_of_Shares_Sell
+    Total_Value_buy = Number_of_Shares_Sell * Close_buy
+
+    st.write(get_price(options,buy_date,buy_date_next))
+    if st.button("Sell"):
+        add_data(Code_buy ,Date_buy ,Close_buy ,Number_of_Shares_buy ,Total_Value_buy ,)
+
+
+
+    with st.expander("Show sell record"):
+        st.write(st.session_state.df)
 
 
 
@@ -101,6 +132,7 @@ grouped = st.session_state.df.groupby('Code').agg({
 
 grouped['avg price'] = grouped['Total Value'] / grouped['Number of Shares']
 
+st.write(' portfolio position')
 st.write(grouped)
 
 
