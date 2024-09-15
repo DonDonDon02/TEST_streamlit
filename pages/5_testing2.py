@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import datetime
 import yfinance as yf 
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 
 st.set_page_config(layout="wide")
 
@@ -27,6 +29,16 @@ else:  # chosen == 'Nasdaq'
         "Select Nasdaq Symbol",
         get_nasdaq_symbols()['Symbol'].unique().tolist(),
     )
+    
+@st.cache_data
+def get_stock_info(ticker):
+    stock = yf.Ticker(ticker)
+    
+    # Fetch historical market data
+   
+    
+    # Fetch other info
+    return stock.info
 
 buy_date = st.sidebar.date_input("Buy Date", datetime.date(2019, 1, 2))
 buy_date_next = buy_date + datetime.timedelta(days=1)
@@ -47,6 +59,39 @@ def fetch_stock_price(symbol, start_date, end_date):
     data = data.drop(columns=['Dividends', 'Stock Splits'])
     data = data.round(2)
     return data
+
+
+
+tickerData = yf.Ticker(options) # Get ticker data
+cando = tickerData.history(period='1d', start=buy_date, end=sell_date)
+
+if not cando.empty:
+    st.title(f'{options} - {get_stock_info(options)["longName"]}')
+
+ 
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    
+
+
+
+
+    # include candlestick with rangeselector
+    fig.add_trace(go.Candlestick(x=cando.index,
+                    open=cando['Open'], high=cando['High'],
+                    low=cando['Low'], close=cando['Close'],name = 'K'),
+                secondary_y=True)
+
+    fig.add_trace(go.Bar(x=cando.index, y=cando['Volume'], 
+                              marker=dict(color=['green' if close >= open else 'red' for close, open in zip(cando['Close'], cando['Open'])]),
+                              name='Volume',opacity=0.5))
+    
+    fig.layout.yaxis2.showgrid=False
+    fig.update_layout(xaxis_rangeslider_visible=False)
+    st.plotly_chart(fig, use_container_width=True)
+    
+else:
+    st.warning("not availber")
 
 # Initialize session state to store a DataFrame
 if 'buy_record' not in st.session_state:
@@ -128,16 +173,16 @@ with col2:
     st.write(grouped_sell)
     
 
-profo = pd.DataFrame({
-    'Symbol': grouped_buy['Symbol'],
-    'Shares Held': grouped_buy['Number of Shares'] - (grouped_sell['Number of Shares'] if not grouped_sell['Number of Shares'].empty else 0),
-    'Holding Value': grouped_buy['Total Value'],
-    'Selling Value': grouped_sell['Total Value'],
-    'Difference in Value': grouped_sell['Total Value'] - grouped_buy['Total Value'],
-    'Difference in Shares': grouped_sell['Number of Shares'] - grouped_buy['Number of Shares']
-})
+portfolio = pd.merge(grouped_buy, grouped_sell, on='Symbol', how='left', suffixes=('_Buy', '_Sell'))
 
-st.write(profo)
+portfolio['Shares Held'] = portfolio['Number of Shares_Buy'] - portfolio['Number of Shares_Sell'].fillna(0)
+portfolio['Holding Value'] = portfolio['Total Value_Buy'] - portfolio['Total Value_Sell'].fillna(0)
+portfolio['Difference in Value'] = portfolio['Total Value_Sell'].fillna(0) - portfolio['Total Value_Buy']
+portfolio['Difference in Shares'] = portfolio['Number of Shares_Sell'].fillna(0) - portfolio['Number of Shares_Buy']
+
+# Display the portfolio
+st.header("Portfolio Summary")
+st.write(portfolio[['Symbol', 'Shares Held', 'Holding Value', 'Difference in Value', 'Difference in Shares']])
 
 # Reset button
 if st.sidebar.button("Reset All Records"):
