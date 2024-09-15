@@ -53,7 +53,7 @@ def fetch_stock_price(symbol, start_date, end_date):
     stock = yf.Ticker(symbol)
     data = stock.history(period='1d', start=start_date, end=end_date)
     if data.empty:
-        st.warning(f"No data found for {symbol}. This symbol may be delisted.")
+        st.warning(f"No data found for {symbol}.Try not select weekend.")
         return pd.DataFrame()  # Return an empty DataFrame
     data.reset_index(inplace=True)
     data['Date'] = data['Date'].dt.strftime('%Y/%m/%d')
