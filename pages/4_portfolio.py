@@ -78,7 +78,6 @@ if not cando.empty:
 
 
 
-    # include candlestick with rangeselector
     fig.add_trace(go.Candlestick(x=cando.index,
                     open=cando['Open'], high=cando['High'],
                     low=cando['Low'], close=cando['Close'],name = 'K'),
@@ -95,14 +94,14 @@ if not cando.empty:
 else:
     st.warning("not availber")
 
-# Initialize session state to store a DataFrame
+# Initialize session state 
 if 'buy_record' not in st.session_state:
     st.session_state.buy_record = pd.DataFrame(columns=['Symbol', 'Date', 'Close', 'Number of Shares', 'Total Value'])
     
 if 'sell_record' not in st.session_state:
     st.session_state.sell_record = pd.DataFrame(columns=['Symbol', 'Date', 'Close', 'Number of Shares', 'Total Value'])
 
-# Function to add new row to DataFrame
+
 def add_buy_record(symbol, date, close, number_of_shares, total_value):
     new_row = {'Symbol': symbol, 'Date': date, 'Close': close, 'Number of Shares': number_of_shares, 'Total Value': total_value}
     st.session_state.buy_record = st.session_state.buy_record._append(new_row, ignore_index=True)
@@ -111,7 +110,6 @@ def add_sell_record(symbol, date, close, number_of_shares, total_value):
     new_row = {'Symbol': symbol, 'Date': date, 'Close': close, 'Number of Shares': number_of_shares, 'Total Value': total_value}
     st.session_state.sell_record = st.session_state.sell_record._append(new_row, ignore_index=True)
 
-# User input for buying
 col1, col2 = st.columns(2)
 
 with col1:
@@ -182,7 +180,7 @@ portfolio['Holding Value'] = portfolio['Total Value_Buy'] - portfolio['Total Val
 portfolio['Difference in Value'] = portfolio['Total Value_Sell'].fillna(0) - portfolio['Total Value_Buy']
 portfolio['Difference in Shares'] = portfolio['Number of Shares_Sell'].fillna(0) - portfolio['Number of Shares_Buy']
 
-# Display the portfolio
+#portfolio
 st.header("Portfolio Summary")
 st.write(portfolio[['Symbol', 'Shares Held', 'Holding Value', 'Difference in Value', 'Difference in Shares']])
 
@@ -198,7 +196,6 @@ fig = px.pie(
     labels={'Holding Value': 'Stock Value'},
 )
 
-# Add text labels to display stock symbols on the pie chart slices
 fig.update_traces(textinfo='label+percent', textposition='inside', showlegend=True)
 
 # Display the pie chart in Streamlit
