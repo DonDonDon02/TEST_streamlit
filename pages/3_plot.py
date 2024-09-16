@@ -30,10 +30,8 @@ def nq_Symbol():
 def get_stock_info(ticker):
     stock = yf.Ticker(ticker)
     
-    # Fetch historical market data
    
     
-    # Fetch other info
     return stock.info
 
 @st.cache_data
